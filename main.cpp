@@ -36,20 +36,6 @@ int main(int argc, const char* argv[]) {
     memory[7] = vpc::create_instruction({vpc::CPU_HLT});
 
 
-    /*uint8_t op = vpc::CPU_ADD;
-    uint8_t arg1 = 0x5;
-    uint8_t arg2 = 0xFF;
-
-    uint32_t instr = vpc::create_instruction({op, arg1, arg2});
-
-    std::cout << (int)op << ", " << (int)arg1 << ", " << (int)arg2 << std::endl;
-
-    std::cout << instr << std::endl;
-
-    vpc::bundle b = vpc::split_instruction(instr);
-
-    std::cout << (int)b.op << ", " << (int)b.arg1 << ", " << (int)b.arg2 << std::endl;*/
-
     vpc::execute(operations, registers, memory);
 
     return 0;

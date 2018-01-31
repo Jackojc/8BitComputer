@@ -121,7 +121,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        if (registers[vpc::REGISTER_ARG2] == 0x0)
+        if (registers[vpc::REGISTER_ARG2] == registers[vpc::REGISTER_NULL])
             registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
     }
 
