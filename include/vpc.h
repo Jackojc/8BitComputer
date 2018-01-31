@@ -11,12 +11,12 @@ namespace vpc {
     enum: uint8_t {
         CPU_NOP,           // NO OPERATION
 
-        CPU_LOAD_A,        // LOAD VALUE INTO REGISTER_A
-        CPU_LOAD_B,        // LOAD VALUE INTO REGISTER_B
-        CPU_STORE_C,       // STORE VALUE IN REGISTER_C
+        CPU_LDA,        // LOAD VALUE INTO REGISTER_A
+        CPU_LDB,        // LOAD VALUE INTO REGISTER_B
+        CPU_STC,       // STORE VALUE IN REGISTER_C
 
-        CPU_EMIT,          // PRINT VALUE IN REGISTER_OR
-        CPU_PRINT,
+        CPU_EMT,          // PRINT VALUE IN REGISTER_OR
+        CPU_PRT,
 
         CPU_ADD,           // ADD A AND B THEN OUTPUT TO REGISTER_C
         CPU_SUB,           // SUB A AND B THEN OUTPUT TO REGISTER_C
@@ -25,12 +25,12 @@ namespace vpc {
         CPU_OR,            // OR A AND B THEN OUTPUT TO REGISTER_C
         CPU_NOT,           // NOT A AND THEN OUTPUT TO REGISTER_C
 
-        CPU_JUMP,          // JUMP TO AN ADDRESS IN MEMORY
-        CPU_JUMP_REL,      // JUMP TO AN ADDRESS RELATIVE TO CURRENT
-        CPU_JUMP_IF_NULL,  // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS NULL
-        CPU_JUMP_IF_EQUAL,
+        CPU_JMP,          // JUMP TO AN ADDRESS IN MEMORY
+        CPU_JMR,      // JUMP TO AN ADDRESS RELATIVE TO CURRENT
+        CPU_JIN,  // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS NULL
+        CPU_JIE,
 
-        CPU_HALT           // HALT THE CPU
+        CPU_HLT           // HALT THE CPU
     };
 
 
@@ -39,9 +39,10 @@ namespace vpc {
         REGISTER_B,     // B REGISTER
         REGISTER_C,     // C REGISTER
 
-        REGISTER_ARG1,  // MEMORY ADDRESS REGISTER
+        REGISTER_ARG1,  // ARG REGISTERS
         REGISTER_ARG2,
         REGISTER_ARG3,
+
         REGISTER_PC,    // PROGRAM COUNTER
         REGISTER_IR     // INSTRUCTION REGISTER
     };

@@ -148,22 +148,22 @@ namespace vpc {
     vpc::operations_t make_instructions() {
         vpc::operations_t ops{cpu_nop};
 
-        ops[vpc::CPU_NOP]           = cpu_nop;
-        ops[vpc::CPU_LOAD_A]        = cpu_lda;
-        ops[vpc::CPU_LOAD_B]        = cpu_ldb;
-        ops[vpc::CPU_STORE_C]       = cpu_stc;
-        ops[vpc::CPU_EMIT]          = cpu_emt;
-        ops[vpc::CPU_PRINT]         = cpu_prt;
-        ops[vpc::CPU_ADD]           = cpu_add;
-        ops[vpc::CPU_SUB]           = cpu_sub;
-        ops[vpc::CPU_AND]           = cpu_and;
-        ops[vpc::CPU_OR]            = cpu_or;
-        ops[vpc::CPU_NOT]           = cpu_not;
-        ops[vpc::CPU_JUMP]          = cpu_jmp;
-        ops[vpc::CPU_JUMP_REL]      = cpu_jmr;
-        ops[vpc::CPU_JUMP_IF_NULL]  = cpu_jin;
-        ops[vpc::CPU_JUMP_IF_EQUAL] = cpu_jie;
-        ops[vpc::CPU_HALT]          = cpu_hlt;
+        ops[vpc::CPU_NOP] = cpu_nop;
+        ops[vpc::CPU_LDA] = cpu_lda;
+        ops[vpc::CPU_LDB] = cpu_ldb;
+        ops[vpc::CPU_STC] = cpu_stc;
+        ops[vpc::CPU_EMT] = cpu_emt;
+        ops[vpc::CPU_PRT] = cpu_prt;
+        ops[vpc::CPU_ADD] = cpu_add;
+        ops[vpc::CPU_SUB] = cpu_sub;
+        ops[vpc::CPU_AND] = cpu_and;
+        ops[vpc::CPU_OR]  = cpu_or;
+        ops[vpc::CPU_NOT] = cpu_not;
+        ops[vpc::CPU_JMP] = cpu_jmp;
+        ops[vpc::CPU_JMR] = cpu_jmr;
+        ops[vpc::CPU_JIN] = cpu_jin;
+        ops[vpc::CPU_JIE] = cpu_jie;
+        ops[vpc::CPU_HLT] = cpu_hlt;
 
         return ops;
     }

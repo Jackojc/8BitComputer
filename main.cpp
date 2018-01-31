@@ -17,23 +17,23 @@ int main(int argc, const char* argv[]) {
     // PROGRAM
     // this program adds 5 + 5 and prints the result.
     // load value at memory[11] into register a.
-    memory[0] = vpc::create_instruction({vpc::CPU_LOAD_A, 0xFF});
+    memory[0] = vpc::create_instruction({vpc::CPU_LDA, 0xFF});
     // load value at memory[12] into register b.
-    memory[1] = vpc::create_instruction({vpc::CPU_LOAD_B, 0xFE});
+    memory[1] = vpc::create_instruction({vpc::CPU_LDB, 0xFE});
 
     // add values in registers a and b then output them to register c.
     memory[2] = vpc::create_instruction({vpc::CPU_ADD});
     // store the value of register c to memory[10].
-    memory[3] = vpc::create_instruction({vpc::CPU_STORE_C, 0xFD});
+    memory[3] = vpc::create_instruction({vpc::CPU_STC, 0xFD});
 
 
     // emit the value in the output register to the display.
-    memory[5] = vpc::create_instruction({vpc::CPU_EMIT, 0xFD});
+    memory[5] = vpc::create_instruction({vpc::CPU_EMT, 0xFD});
     // print the value 10 which is a newline in ascii.
-    memory[6] = vpc::create_instruction({vpc::CPU_PRINT, 0xFD});
+    memory[6] = vpc::create_instruction({vpc::CPU_PRT, 0xFD});
 
     // halt the cpu.
-    memory[7] = vpc::create_instruction({vpc::CPU_HALT});
+    memory[7] = vpc::create_instruction({vpc::CPU_HLT});
 
 
     /*uint8_t op = vpc::CPU_ADD;
