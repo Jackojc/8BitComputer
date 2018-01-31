@@ -13,7 +13,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_A] = memory[registers[vpc::REGISTER_DATA]];
+        registers[vpc::REGISTER_A] = load_byte(memory, registers[vpc::REGISTER_ARG1]);
     }
 
 
@@ -22,16 +22,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_B] = memory[registers[vpc::REGISTER_DATA]];
-    }
-
-
-    void cpu_ldcm(
-            vpc::registers_t& registers,
-            vpc::memory_t& memory,
-            bool& running
-        ) {
-        registers[vpc::REGISTER_CMR] = memory[registers[vpc::REGISTER_DATA]];
+        registers[vpc::REGISTER_B] = load_byte(memory, registers[vpc::REGISTER_ARG1]);
     }
 
 
@@ -40,7 +31,7 @@ namespace vpc {
             vpc::memory_t& memory,
             bool& running
         ) {
-        memory[registers[vpc::REGISTER_DATA]] = registers[vpc::REGISTER_C];
+        save_byte(memory, registers[vpc::REGISTER_ARG1], registers[vpc::REGISTER_C]);
     }
 
 
@@ -49,7 +40,16 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        std::cout << (int)memory[registers[vpc::REGISTER_DATA]];
+        std::cout << (int)load_byte(memory, registers[vpc::REGISTER_ARG1]);
+    }
+
+
+    void cpu_prt(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        std::cout << load_byte(memory, registers[vpc::REGISTER_ARG1]);
     }
 
 
@@ -103,7 +103,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_DATA];
+        registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
     }
 
 
@@ -112,7 +112,7 @@ namespace vpc {
             vpc::memory_t& memory,
             bool& running
         ) {
-        registers[vpc::REGISTER_PC] += registers[vpc::REGISTER_DATA];
+        registers[vpc::REGISTER_PC] += registers[vpc::REGISTER_ARG1];
     }
 
 
@@ -121,8 +121,18 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        if (registers[vpc::REGISTER_CMR] == 0x0)
-            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_DATA];
+        if (registers[vpc::REGISTER_ARG2] == 0x0)
+            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
+    }
+
+
+    void cpu_jie(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        if (registers[vpc::REGISTER_ARG2] == registers[vpc::REGISTER_ARG3])
+            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
     }
 
 
@@ -138,21 +148,22 @@ namespace vpc {
     vpc::operations_t make_instructions() {
         vpc::operations_t ops{cpu_nop};
 
-        ops[vpc::CPU_NOP]          = cpu_nop;
-        ops[vpc::CPU_LOAD_A]       = cpu_lda;
-        ops[vpc::CPU_LOAD_B]       = cpu_ldb;
-        ops[vpc::CPU_LOAD_CMR]     = cpu_ldcm;
-        ops[vpc::CPU_STORE_C]      = cpu_stc;
-        ops[vpc::CPU_EMIT]         = cpu_emt;
-        ops[vpc::CPU_ADD]          = cpu_add;
-        ops[vpc::CPU_SUB]          = cpu_sub;
-        ops[vpc::CPU_AND]          = cpu_and;
-        ops[vpc::CPU_OR]           = cpu_or;
-        ops[vpc::CPU_NOT]          = cpu_not;
-        ops[vpc::CPU_JUMP]         = cpu_jmp;
-        ops[vpc::CPU_JUMP_REL]     = cpu_jmr;
-        ops[vpc::CPU_JUMP_IF_NULL] = cpu_jin;
-        ops[vpc::CPU_HALT]         = cpu_hlt;
+        ops[vpc::CPU_NOP]           = cpu_nop;
+        ops[vpc::CPU_LOAD_A]        = cpu_lda;
+        ops[vpc::CPU_LOAD_B]        = cpu_ldb;
+        ops[vpc::CPU_STORE_C]       = cpu_stc;
+        ops[vpc::CPU_EMIT]          = cpu_emt;
+        ops[vpc::CPU_PRINT]         = cpu_prt;
+        ops[vpc::CPU_ADD]           = cpu_add;
+        ops[vpc::CPU_SUB]           = cpu_sub;
+        ops[vpc::CPU_AND]           = cpu_and;
+        ops[vpc::CPU_OR]            = cpu_or;
+        ops[vpc::CPU_NOT]           = cpu_not;
+        ops[vpc::CPU_JUMP]          = cpu_jmp;
+        ops[vpc::CPU_JUMP_REL]      = cpu_jmr;
+        ops[vpc::CPU_JUMP_IF_NULL]  = cpu_jin;
+        ops[vpc::CPU_JUMP_IF_EQUAL] = cpu_jie;
+        ops[vpc::CPU_HALT]          = cpu_hlt;
 
         return ops;
     }
