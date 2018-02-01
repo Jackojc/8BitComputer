@@ -26,6 +26,15 @@ namespace vpc {
     }
 
 
+    void cpu_ldr(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_ARG2] = load_byte(memory, registers[vpc::REGISTER_ARG1]);
+    }
+
+
     void cpu_stc(
             vpc::registers_t& registers,
             vpc::memory_t& memory,
@@ -172,6 +181,7 @@ namespace vpc {
 
         ops[vpc::CPU_LDA] = cpu_lda;
         ops[vpc::CPU_LDB] = cpu_ldb;
+        ops[vpc::CPU_LDR] = cpu_ldr;
         ops[vpc::CPU_STC] = cpu_stc;
 
         ops[vpc::CPU_EMT] = cpu_emt;

@@ -17,6 +17,7 @@ namespace vpc {
 
         CPU_LDA, // LOAD VALUE INTO REGISTER_A
         CPU_LDB, // LOAD VALUE INTO REGISTER_B
+        CPU_LDR, // LOAD VALUE INTO REGISTER OF CHOICE
         CPU_STC, // STORE VALUE IN REGISTER_C
 
         CPU_EMT, // EMIT VALUE AT ADDRESS AS ASCII
@@ -53,6 +54,14 @@ namespace vpc {
         REGISTER_PC,    // PROGRAM COUNTER
         REGISTER_IR,    // INSTRUCTION REGISTER
 
+        REGISTER_GENERAL1, // GENERAL PURPOSE REGISTERS
+        REGISTER_GENERAL2,
+        REGISTER_GENERAL3,
+        REGISTER_GENERAL4,
+        REGISTER_GENERAL5,
+        REGISTER_GENERAL6,
+        REGISTER_GENERAL7,
+
         REGISTER_NULL   // CONSTANT VALUE OF NULL
     };
 
@@ -64,7 +73,7 @@ namespace vpc {
         byte arg3;
 
         bundle(
-            byte op_   = CPU_NOP,
+            byte op_   = 0x0,
             byte arg1_ = 0x0,
             byte arg2_ = 0x0,
             byte arg3_ = 0x0
