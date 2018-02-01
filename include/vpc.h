@@ -31,8 +31,11 @@ namespace vpc {
 
         CPU_JMP, // JUMP TO AN ADDRESS IN MEMORY
         CPU_JMR, // JUMP TO AN ADDRESS RELATIVE TO CURRENT
+
         CPU_JIN, // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS NULL
         CPU_JIE, // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS EQUAL
+        CPU_JIL, // JUMP TO AN ADDRESS IN MEMOTY IF VALUE IS LESS
+        CPU_JIM, // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS MORE
 
         CPU_HLT  // HALT THE CPU
     };
@@ -97,6 +100,11 @@ namespace vpc {
         tmp[3] = b.op;
 
         return *reinterpret_cast<instruction*>(&tmp);
+    }
+
+
+    instruction create_data(byte data) {
+        return create_instruction({CPU_NOP, data});
     }
 
 

@@ -1,6 +1,9 @@
 # 8BitComputer
 Simple 8 bit computer emulator.
 
+Address width is 8 bits.
+Byte width is 8 bits.
+
 ```
 NOP / []                 / No operation.
 
@@ -19,8 +22,11 @@ NOT / []                 / NOT A then store the result in C.
 
 JMP / [ADDR]             / Set the program counter to [ADDR].
 JMR / [ADDR]             / Set the program counter to current address + [ADDR].
+
 JIN / [ADDR, CMPR]       / Set the program counter to [ADDR] if value at [CMPR] == 0.
-JIE / [ADDR, CMPR, VALU] / Set the program counter to [ADDR] if value at [CMPR] == [VALU].
+JIE / [ADDR, CMPR, ADDR2] / Set the program counter to [ADDR] if value at [CMPR] == [ADDR2].
+JIL / [ADDR, CMPR, ADDR2] / Set the program counter to [ADDR] if value at [CMPR] < [ADDR2].
+JIM / [ADDR, CMPR, ADDR2] / Set the program counter to [ADDR] if value at [CMPR] > [ADDR2].
 
 HLT / []                 / Halt the CPU.
 ```
