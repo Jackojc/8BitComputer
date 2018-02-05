@@ -26,12 +26,30 @@ namespace vpc {
     }
 
 
+    void cpu_ldg(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_GENERAL1] = load_byte(memory, registers[vpc::REGISTER_ARG]);
+    }
+
+
     void cpu_sta(
             vpc::registers_t& registers,
             vpc::memory_t& memory,
             bool& running
         ) {
         save_byte(memory, registers[vpc::REGISTER_ARG], registers[vpc::REGISTER_A]);
+    }
+
+
+    void cpu_stg(
+            vpc::registers_t& registers,
+            vpc::memory_t& memory,
+            bool& running
+        ) {
+        save_byte(memory, registers[vpc::REGISTER_ARG], registers[vpc::REGISTER_GENERAL1]);
     }
 
 
@@ -107,6 +125,16 @@ namespace vpc {
     }
 
 
+    void cpu_nul(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        save_byte(memory, registers[vpc::REGISTER_ARG], 0x0);
+    }
+
+
+
     void cpu_jmp(
         vpc::registers_t& registers,
         vpc::memory_t& memory,
@@ -161,7 +189,10 @@ namespace vpc {
 
         ops[vpc::CPU_LDA] = cpu_lda;
         ops[vpc::CPU_LDB] = cpu_ldb;
+        ops[vpc::CPU_LDG] = cpu_ldg;
+
         ops[vpc::CPU_STA] = cpu_sta;
+        ops[vpc::CPU_STG] = cpu_stg;
 
         ops[vpc::CPU_EMT] = cpu_emt;
         ops[vpc::CPU_PRT] = cpu_prt;
@@ -172,6 +203,8 @@ namespace vpc {
         ops[vpc::CPU_AND] = cpu_and;
         ops[vpc::CPU_OR]  = cpu_or;
         ops[vpc::CPU_NOT] = cpu_not;
+
+        ops[vpc::CPU_NUL] = cpu_nul;
 
         ops[vpc::CPU_JMP] = cpu_jmp;
         ops[vpc::CPU_JMR] = cpu_jmr;
