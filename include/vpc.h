@@ -8,7 +8,7 @@ namespace vpc {
     constexpr int TOTAL_REGISTERS          = 16;
 
 
-    using instruction = uint32_t;
+    using instruction = uint16_t;
     using byte        = uint8_t;
 
 
@@ -17,26 +17,28 @@ namespace vpc {
 
         CPU_LDA, // LOAD VALUE INTO REGISTER_A
         CPU_LDB, // LOAD VALUE INTO REGISTER_B
-        CPU_LDR, // LOAD VALUE INTO REGISTER OF CHOICE
-        CPU_STC, // STORE VALUE IN REGISTER_C
+
+        CPU_STA, // STORE VALUE FROM REGISTER_A TO ADDR
 
         CPU_EMT, // EMIT VALUE AT ADDRESS AS ASCII
         CPU_PRT, // PRINT VALUE AT ADDRESS AS RAW VALUE
 
-        CPU_ADD, // ADD A AND B THEN OUTPUT TO REGISTER_C
-        CPU_SUB, // SUB A AND B THEN OUTPUT TO REGISTER_C
+        CPU_ADD, // ADD A AND B THEN OUTPUT TO REGISTER_A
+        CPU_SUB, // SUB A AND B THEN OUTPUT TO REGISTER_A
 
-        CPU_AND, // AND A AND B THEN OUTPUT TO REGISTER_C
-        CPU_OR,  // OR A AND B THEN OUTPUT TO REGISTER_C
-        CPU_NOT, // NOT A AND THEN OUTPUT TO REGISTER_C
+        CPU_CMP, // COMPARE A AND B THEN OUTPUT TO REGISTER_FLAGS
+        CPU_AND, // AND A AND B THEN OUTPUT TO REGISTER_A
+        CPU_OR,  // OR A AND B THEN OUTPUT TO REGISTER_A
+        CPU_NOT, // NOT A AND THEN OUTPUT TO REGISTER_A
+
+        CPU_NUL, // ZERO OUT A VALUE A AN ADDRESS
+        CPU_MOV, // MOVE MEMORY FROM ONE PLACE TO ANOTHER
 
         CPU_JMP, // JUMP TO AN ADDRESS IN MEMORY
         CPU_JMR, // JUMP TO AN ADDRESS RELATIVE TO CURRENT
 
-        CPU_JIN, // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS NULL
-        CPU_JIE, // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS EQUAL
-        CPU_JIL, // JUMP TO AN ADDRESS IN MEMOTY IF VALUE IS LESS
-        CPU_JIM, // JUMP TO AN ADDRESS IN MEMORY IF VALUE IS MORE
+        CPU_JIN, // JUMP TO AN ADDRESS IF FLAGS IS FALSE
+        CPU_JIE, // JUMP TO AN ADDRESS IF FLAGS IS TRUE
 
         CPU_HLT  // HALT THE CPU
     };
@@ -45,11 +47,10 @@ namespace vpc {
     enum: byte {
         REGISTER_A,     // A REGISTER
         REGISTER_B,     // B REGISTER
-        REGISTER_C,     // C REGISTER
 
-        REGISTER_ARG1,  // ARG REGISTERS
-        REGISTER_ARG2,
-        REGISTER_ARG3,
+        REGISTER_ARG,
+
+        REGISTER_FLAGS,
 
         REGISTER_PC,    // PROGRAM COUNTER
         REGISTER_IR,    // INSTRUCTION REGISTER
@@ -60,7 +61,6 @@ namespace vpc {
         REGISTER_GENERAL4,
         REGISTER_GENERAL5,
         REGISTER_GENERAL6,
-        REGISTER_GENERAL7,
 
         REGISTER_NULL   // CONSTANT VALUE OF NULL
     };
@@ -68,20 +68,14 @@ namespace vpc {
 
     struct bundle {
         byte op;
-        byte arg1;
-        byte arg2;
-        byte arg3;
+        byte arg;
 
         bundle(
             byte op_   = 0x0,
-            byte arg1_ = 0x0,
-            byte arg2_ = 0x0,
-            byte arg3_ = 0x0
+            byte arg_  = 0x0
         ):
             op(op_),
-            arg1(arg1_),
-            arg2(arg2_),
-            arg3(arg3_)
+            arg(arg_)
         {}
     };
 
@@ -91,22 +85,18 @@ namespace vpc {
 
         byte* msg = reinterpret_cast<byte*>(&instr);
 
-        b.op   = msg[3];
-        b.arg1 = msg[2];
-        b.arg2 = msg[1];
-        b.arg3 = msg[0];
+        b.op   = msg[1];
+        b.arg  = msg[0];
 
         return b;
     }
 
 
     instruction create_instruction(bundle b) {
-        byte tmp[4];
+        byte tmp[2];
 
-        tmp[0] = b.arg3;
-        tmp[1] = b.arg2;
-        tmp[2] = b.arg1;
-        tmp[3] = b.op;
+        tmp[0] = b.arg;
+        tmp[1] = b.op;
 
         return *reinterpret_cast<instruction*>(&tmp);
     }
@@ -127,12 +117,12 @@ namespace vpc {
 
     byte load_byte(memory_t& memory, unsigned index) {
         bundle b = split_instruction(memory[index]);
-        return b.arg1;
+        return b.arg;
     }
 
 
     void save_byte(memory_t& memory, unsigned index, byte c) {
-        memory[index] = create_instruction({CPU_NOP, c, 0x0});
+        memory[index] = create_instruction({CPU_NOP, c});
     }
 
 
@@ -146,18 +136,14 @@ namespace vpc {
         byte& pc   = registers[REGISTER_PC];
         byte& ir   = registers[REGISTER_IR];
 
-        byte& arg1 = registers[REGISTER_ARG1];
-        byte& arg2 = registers[REGISTER_ARG2];
-        byte& arg3 = registers[REGISTER_ARG3];
+        byte& arg  = registers[REGISTER_ARG];
 
 
         while (running) {
             bundle b = split_instruction(memory[pc]);
 
             ir   = b.op;
-            arg1 = b.arg1;
-            arg2 = b.arg2;
-            arg3 = b.arg3;
+            arg  = b.arg;
 
             pc++;
 

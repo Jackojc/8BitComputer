@@ -13,7 +13,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_A] = load_byte(memory, registers[vpc::REGISTER_ARG1]);
+        registers[vpc::REGISTER_A] = load_byte(memory, registers[vpc::REGISTER_ARG]);
     }
 
 
@@ -22,25 +22,16 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_B] = load_byte(memory, registers[vpc::REGISTER_ARG1]);
+        registers[vpc::REGISTER_B] = load_byte(memory, registers[vpc::REGISTER_ARG]);
     }
 
 
-    void cpu_ldr(
-        vpc::registers_t& registers,
-        vpc::memory_t& memory,
-        bool& running
-    ) {
-        registers[vpc::REGISTER_ARG2] = load_byte(memory, registers[vpc::REGISTER_ARG1]);
-    }
-
-
-    void cpu_stc(
+    void cpu_sta(
             vpc::registers_t& registers,
             vpc::memory_t& memory,
             bool& running
         ) {
-        save_byte(memory, registers[vpc::REGISTER_ARG1], registers[vpc::REGISTER_C]);
+        save_byte(memory, registers[vpc::REGISTER_ARG], registers[vpc::REGISTER_A]);
     }
 
 
@@ -49,7 +40,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        std::cout << (int)load_byte(memory, registers[vpc::REGISTER_ARG1]) << std::flush;
+        std::cout << (int)load_byte(memory, registers[vpc::REGISTER_ARG]) << std::flush;
     }
 
 
@@ -58,7 +49,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        std::cout << load_byte(memory, registers[vpc::REGISTER_ARG1]) << std::flush;
+        std::cout << load_byte(memory, registers[vpc::REGISTER_ARG]) << std::flush;
     }
 
 
@@ -67,7 +58,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_C] = registers[vpc::REGISTER_A] + registers[vpc::REGISTER_B];
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] + registers[vpc::REGISTER_B];
     }
 
 
@@ -76,7 +67,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_C] = registers[vpc::REGISTER_A] - registers[vpc::REGISTER_B];
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] - registers[vpc::REGISTER_B];
     }
 
 
@@ -85,7 +76,7 @@ namespace vpc {
             vpc::memory_t& memory,
             bool& running
         ) {
-        registers[vpc::REGISTER_C] = registers[vpc::REGISTER_A] & registers[vpc::REGISTER_B];
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] & registers[vpc::REGISTER_B];
     }
 
 
@@ -94,7 +85,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_C] = registers[vpc::REGISTER_A] | registers[vpc::REGISTER_B];
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] | registers[vpc::REGISTER_B];
     }
 
 
@@ -103,7 +94,16 @@ namespace vpc {
             vpc::memory_t& memory,
             bool& running
         ) {
-        registers[vpc::REGISTER_C] = ~registers[vpc::REGISTER_A];
+        registers[vpc::REGISTER_A] = ~registers[vpc::REGISTER_A];
+    }
+
+
+    void cpu_cmp(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_FLAGS] = registers[vpc::REGISTER_A] == registers[vpc::REGISTER_B];
     }
 
 
@@ -112,7 +112,7 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
+        registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG];
     }
 
 
@@ -121,7 +121,7 @@ namespace vpc {
             vpc::memory_t& memory,
             bool& running
         ) {
-        registers[vpc::REGISTER_PC] += registers[vpc::REGISTER_ARG1];
+        registers[vpc::REGISTER_PC] += registers[vpc::REGISTER_ARG];
     }
 
 
@@ -130,8 +130,8 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        if (load_byte(memory, registers[vpc::REGISTER_ARG2]) == registers[vpc::REGISTER_NULL])
-            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
+        if (!registers[vpc::REGISTER_FLAGS])
+            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG];
     }
 
 
@@ -140,28 +140,8 @@ namespace vpc {
         vpc::memory_t& memory,
         bool& running
     ) {
-        if (load_byte(memory, registers[vpc::REGISTER_ARG2]) == load_byte(memory, registers[vpc::REGISTER_ARG3]))
-            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
-    }
-
-
-    void cpu_jil(
-        vpc::registers_t& registers,
-        vpc::memory_t& memory,
-        bool& running
-    ) {
-        if (load_byte(memory, registers[vpc::REGISTER_ARG2]) < load_byte(memory, registers[vpc::REGISTER_ARG3]))
-            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
-    }
-
-
-    void cpu_jim(
-        vpc::registers_t& registers,
-        vpc::memory_t& memory,
-        bool& running
-    ) {
-        if (load_byte(memory, registers[vpc::REGISTER_ARG2]) > load_byte(memory, registers[vpc::REGISTER_ARG3]))
-            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG1];
+        if (registers[vpc::REGISTER_FLAGS])
+            registers[vpc::REGISTER_PC] = registers[vpc::REGISTER_ARG];
     }
 
 
@@ -181,12 +161,12 @@ namespace vpc {
 
         ops[vpc::CPU_LDA] = cpu_lda;
         ops[vpc::CPU_LDB] = cpu_ldb;
-        ops[vpc::CPU_LDR] = cpu_ldr;
-        ops[vpc::CPU_STC] = cpu_stc;
+        ops[vpc::CPU_STA] = cpu_sta;
 
         ops[vpc::CPU_EMT] = cpu_emt;
         ops[vpc::CPU_PRT] = cpu_prt;
 
+        ops[vpc::CPU_CMP] = cpu_cmp;
         ops[vpc::CPU_ADD] = cpu_add;
         ops[vpc::CPU_SUB] = cpu_sub;
         ops[vpc::CPU_AND] = cpu_and;
@@ -198,9 +178,6 @@ namespace vpc {
 
         ops[vpc::CPU_JIN] = cpu_jin;
         ops[vpc::CPU_JIE] = cpu_jie;
-        ops[vpc::CPU_JIL] = cpu_jil;
-        ops[vpc::CPU_JIM] = cpu_jim;
-
 
         ops[vpc::CPU_HLT] = cpu_hlt;
 
