@@ -15,15 +15,31 @@ LDG / [ADDR]              / Load value at [ADDR] into G.
 STC / [ADDR]              / Store value in C to [ADDR].
 STG / [ADDR]              / Store value in G to [ADDR].
 
+CLA / []                  / Clear register A.
+CLB / []                  / Clear register B.
+CLG / []                  / Clear register G.
+CLF / []                  / Clear register FLAGS.
+
 EMT / [ADDR]              / Emit value at [ADDR] to the output device(terminal) as a raw value.
 PRT / [ADDR]              / Print a value at [ADDR] to the output device(terminal) as an ASCII value.
 
 CMP / []                  / Store the resulting bool from A == B and store it in REGISTER_FLAGS.
-ADD / []                  / Add A and B together then store the result in C.
-SUB / []                  / Sub B from A then store the result in C.
-AND / []                  / AND A and B together then store the result in C.
-OR  / []                  / OR A and B together then store the result in C.
-NOT / []                  / NOT A then store the result in C.
+
+INC / [VAL]               / Increment value in A by [VAL].
+DEC / [VAL]               / Decrement value in A by [VAL].
+
+LSH / [BITS]              / Shift value in A to the left by [BITS] and store result in A.
+RSH / [BITS]              / Shift value in A to the right by [BITS] and store result in A.
+
+ADD / []                  / Add A and B together then store the result in A.
+SUB / []                  / Sub B from A then store the result in A.
+MUL / []                  / Multiply A by B then store the result in A.
+DIV / []                  / Divide A by B then store the result in A.
+NEG / []                  / Negate A and then store the result in A.
+
+AND / []                  / AND A and B together then store the result in A.
+OR  / []                  / OR A and B together then store the result in A.
+NOT / []                  / NOT A then store the result in A.
 
 NUL / [ADDR]              / Set value at [ADDR] to null.
 

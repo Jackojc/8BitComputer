@@ -71,6 +71,78 @@ namespace vpc {
     }
 
 
+    void cpu_lsh(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] << registers[vpc::REGISTER_ARG];
+    }
+
+
+    void cpu_rsh(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] >> registers[vpc::REGISTER_ARG];
+    }
+
+
+    void cpu_inc(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] += registers[vpc::REGISTER_ARG];
+    }
+
+
+    void cpu_dec(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] -= registers[vpc::REGISTER_ARG];
+    }
+
+
+    void cpu_cla(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = 0;
+    }
+
+
+    void cpu_clb(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_B] = 0;
+    }
+
+
+    void cpu_clg(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_GENERAL1] = 0;
+    }
+
+
+    void cpu_clf(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_FLAGS] = 0;
+    }
+
+
     void cpu_add(
         vpc::registers_t& registers,
         vpc::memory_t& memory,
@@ -86,6 +158,33 @@ namespace vpc {
         bool& running
     ) {
         registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] - registers[vpc::REGISTER_B];
+    }
+
+
+    void cpu_mul(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] * registers[vpc::REGISTER_B];
+    }
+
+
+    void cpu_div(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = registers[vpc::REGISTER_A] / registers[vpc::REGISTER_B];
+    }
+
+
+    void cpu_neg(
+        vpc::registers_t& registers,
+        vpc::memory_t& memory,
+        bool& running
+    ) {
+        registers[vpc::REGISTER_A] = -registers[vpc::REGISTER_A];
     }
 
 
@@ -197,9 +296,24 @@ namespace vpc {
         ops[vpc::CPU_EMT] = cpu_emt;
         ops[vpc::CPU_PRT] = cpu_prt;
 
-        ops[vpc::CPU_CMP] = cpu_cmp;
+        ops[vpc::CPU_LSH] = cpu_lsh;
+        ops[vpc::CPU_RSH] = cpu_rsh;
+
+        ops[vpc::CPU_INC] = cpu_inc;
+        ops[vpc::CPU_DEC] = cpu_dec;
+
+        ops[vpc::CPU_CLA] = cpu_cla;
+        ops[vpc::CPU_CLB] = cpu_clb;
+        ops[vpc::CPU_CLG] = cpu_clg;
+        ops[vpc::CPU_CLF] = cpu_clf;
+
         ops[vpc::CPU_ADD] = cpu_add;
         ops[vpc::CPU_SUB] = cpu_sub;
+        ops[vpc::CPU_MUL] = cpu_mul;
+        ops[vpc::CPU_DIV] = cpu_div;
+        ops[vpc::CPU_NEG] = cpu_neg;
+
+        ops[vpc::CPU_CMP] = cpu_cmp;
         ops[vpc::CPU_AND] = cpu_and;
         ops[vpc::CPU_OR]  = cpu_or;
         ops[vpc::CPU_NOT] = cpu_not;
