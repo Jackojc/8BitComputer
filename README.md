@@ -10,7 +10,6 @@ NOP / []                  / No operation.
 
 LDA / [ADDR]              / Load value at [ADDR] into A.
 LDB / [ADDR]              / Load value at [ADDR] into B.
-LDR / [ADDR, REG]         / Load value at [ADDR] into [REG].
 STC / [ADDR]              / Store value in C to [ADDR].
 
 EMT / [ADDR]              / Emit value at [ADDR] to the output device(terminal) as a raw value.
