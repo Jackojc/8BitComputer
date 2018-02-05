@@ -3,7 +3,7 @@ Simple 8 bit computer emulator.
 
 - 16 general purpose registers.
 - 256 bytes of addressable memory.
-- 20 instructions.
+- 31 instructions.
 
 ```
 NOP / []                  / No operation.
